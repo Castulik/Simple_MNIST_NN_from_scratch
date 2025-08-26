@@ -1,12 +1,15 @@
+# %%
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+
+# %%
 
 data = pd.read_csv("train.csv")
 
 #Prevedli jsme data na NumPy pole pro lepsi praci s maticemi
 data = np.array(data)
-print(data.shape)
+#print(data.shape)
 
 #Potrebujeme data rozdelit na train a test data. Nejdrvi musime taky data zamichat - napriklad aby model nevidel vzory v poradi dat
 m, n = data.shape
@@ -23,10 +26,12 @@ X_train = data_train[1:n]
 X_train = X_train / 255.
 _,m_train = X_train.shape
 
+# %%
+
 def init_params():
-    W1 = np.random.rand(10, 784) - 0.5
-    b1 = np.random.rand(10, 1) - 0.5
-    W2 = np.random.rand(10, 10) - 0.5
+    W1 = np.random.rand(64, 784) - 0.5
+    b1 = np.random.rand(64, 1) - 0.5
+    W2 = np.random.rand(10, 64) - 0.5
     b2 = np.random.rand(10, 1) - 0.5
     return W1, b1, W2, b2
 
@@ -63,7 +68,10 @@ def back_prop(A2, A1, W2, X, Y, Z1, Z2):
     dZ1 = W2.T.dot(dZ2) * ReLU_deriv(Z1)
     dW1 = 1 / m * dZ1.dot(X.T)
     db1 = 1 / m * np.sum(dZ1)
-    return dW1, db1, dW2, db2
+
+    loss = -np.sum(one_hot_Y * np.log(A2)) / m
+
+    return dW1, db1, dW2, db2, loss
 
 def update_params(alfa, dW1, db1, dW2, db2, W1, b1, W2, b2):
     W1 = W1 - alfa * dW1
@@ -76,20 +84,66 @@ def get_predictions(A2):
     return np.argmax(A2, 0)
 
 def get_accuracy(predictions, Y):
-    print(predictions, Y)
+    #print(predictions, Y)
     return np.sum(predictions == Y) / Y.size
 
 
 def gradient_descent(X, Y, iteration, alfa):
     W1, b1, W2, b2 = init_params()
+    losses = []
     for i in range(iteration):
         Z1, A1, Z2, A2 = forward_prop(W1, b1, W2, b2, X)
-        dW1, db1, dW2, db2 = back_prop(A2, A1, W2, X, Y, Z1, Z2)
+        dW1, db1, dW2, db2, loss = back_prop(A2, A1, W2, X, Y, Z1, Z2)
         W1, b1, W2, b2 = update_params(alfa, dW1, db1, dW2, db2, W1, b1, W2, b2)
-        if i % 10 == 0:
-            print("iteration: ", i)
-            predictions = get_predictions(A2)
-            print(get_accuracy(predictions, Y))
-    return W1, b1, W2, b2
+        losses.append(loss)
 
-W1, b1, W2, b2 = gradient_descent(X_train, Y_train, 500, 0.1)
+        predictions = get_predictions(A2)
+        accuracy = get_accuracy(predictions, Y)
+
+        if accuracy >= 0.95 and alfa != 0.01:
+            print(f"Changing learning rate to 0.01 at iteration {i}")
+            alfa = 0.01
+
+        if i % 50 == 0:
+            print(f"Learning rate: {alfa}")
+            print(f"iteration: {i} | accuracy: {accuracy:.4f} | loss: {loss:.4f}")
+
+    return W1, b1, W2, b2, losses
+
+# %%
+
+W1, b1, W2, b2, losses = gradient_descent(X_train, Y_train, 2001, 0.1)
+
+
+# %%
+# lets look if our model is overfitting or not. Lets aply Dev_X
+
+def test_model(W1, b1, W2, b2, X):
+    Z1, A1, Z2, A2 = forward_prop(W1, b1, W2, b2, X)
+    prediction = get_predictions(A2)
+    return prediction
+
+def test_prediction(index, W1, b1, W2, b2):
+    current_image = X_train[:, index, None]
+    prediction = test_model(W1, b1, W2, b2, X_train[:, index, None],)
+    label = Y_train[index]
+    print("Prediction: ", prediction)
+    print("Label: ", label)
+    
+    current_image = current_image.reshape((28, 28)) * 255
+    plt.gray()
+    plt.imshow(current_image, interpolation='nearest')
+    plt.show()
+
+# %%
+
+TestPrediction = test_model(W1, b1, W2, b2, X_dev)
+print("Presnost testovacich dat: " + str(get_accuracy(TestPrediction, Y_dev)))
+
+plt.plot(losses)
+plt.show()
+
+test_prediction(25, W1, b1, W2, b2)
+test_prediction(100, W1, b1, W2, b2)
+test_prediction(5, W1, b1, W2, b2)
+test_prediction(150, W1, b1, W2, b2)
