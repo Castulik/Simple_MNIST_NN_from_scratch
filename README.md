@@ -16,17 +16,17 @@ It classifies handwritten digits from the **MNIST dataset** without relying on a
 ---
 
 ## BEST PERFORMANCE
--Learning rate: 0.1
--iteration: 0 | accuracy: 0.0654 | loss: 8.3716
--Learning rate: 0.1
--iteration: 50 | accuracy: 0.7078 | loss: 0.9210
--...
--...
--...
--Learning rate: 0.1
--iteration: 1950 | accuracy: 0.9366 | loss: 0.2152
--Learning rate: 0.1
--iteration: 2000 | accuracy: 0.9375 | loss: 0.2129
+- Learning rate: 0.1
+- iteration: 0 | accuracy: 0.0654 | loss: 8.3716
+- Learning rate: 0.1
+- iteration: 50 | accuracy: 0.7078 | loss: 0.9210
+- ...
+- ...
+- ...
+- Learning rate: 0.1
+- iteration: 1950 | accuracy: 0.9366 | loss: 0.2152
+- Learning rate: 0.1
+- iteration: 2000 | accuracy: 0.9375 | loss: 0.2129
 
 Acuract test dat: 0.916
 
