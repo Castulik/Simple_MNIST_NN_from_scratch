@@ -1,54 +1,21 @@
-Simple MNIST Neural Network (from scratch, NumPy)
+# MNIST Neural Network from Scratch
 
-This project implements a simple neural network for handwritten digit classification using the MNIST dataset
-. The network is built entirely from scratch using NumPy, without relying on frameworks like TensorFlow or Keras.
+This project is a simple implementation of a **neural network built entirely from scratch using NumPy**.  
+It classifies handwritten digits from the **MNIST dataset** without relying on any machine learning frameworks like TensorFlow or PyTorch.
 
-The implementation is based on this excellent tutorial
-, which served as inspiration and helped me understand the fundamentals of neural networks.
+> **Inspiration:** The project is based on the excellent [Kaggle notebook by wwsalmon](https://www.kaggle.com/code/wwsalmon/simple-mnist-nn-from-scratch-numpy-no-tf-keras), which helped me understand the core principles behind how neural networks work.
 
-Features
+---
 
-Loading and preprocessing MNIST data
+## 📌 Features
+- Load and preprocess MNIST data (`train.csv`, `test.csv`)
+- **Forward propagation** implementation
+- **Cross-entropy loss** calculation
+- **Backpropagation** for weight updates
+- Training & accuracy evaluation on test data (~90% after several epochs)
+---
 
-Forward propagation implementation
-
-Cross-entropy loss calculation
-
-Backpropagation for weight updates
-
-Training on the training set and evaluating accuracy on the test set
-
-Requirements
-
-Python 3.10+
-
-NumPy
-
-Pandas (for loading the dataset)
-
-Install dependencies:
-
-pip install numpy pandas
-
-How to run
-
-Clone the repository:
-
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
-
-
-Make sure you have train.csv and test.csv from the Kaggle MNIST competition in the project folder.
-
-Run the script:
-
-python Simple_MNIST_NN_from_scratch.py
-
-Results
-
-After several training epochs, the network should achieve an accuracy of around 90% on the test set.
-
-Acknowledgment
-
-Special thanks to wwsalmon
- for the inspiration and clear explanation of neural network principles.
+## 🛠 Requirements
+- **Python 3.10+**
+- **NumPy**
+- **Pandas** (for data loading)
